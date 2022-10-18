@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <script type="text/javascript" src="../js/include-web.js"></script>
+        <script type="text/javascript" include="iclient-leaflet-css" src="../../dist/leaflet/include-leaflet.js"></script>
+        <!--引入left css 文件-->
+        <link href="http://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.css" rel="stylesheet"/>
+        <!--引入left css 文件-->
+        <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.js"></script>
+        <!--iclient-leaflet CSS 文件-->
+        <link rel="stylesheet" href="https://iclient.supermap.io/dist/leaflet/iclient-leaflet.min.css"/>
+        <!--iclient-leaflet JS 文件-->
+        <script type="text/javascript" src="https://iclient.supermap.io/dist/leaflet/iclient-leaflet.js"></script>
+        <link href="https://iclient.supermap.io/web/libs/leaflet/plugins/leaflet-miniMap/3.6.1/dist/Control.MiniMap.min.css" />
+        <script type="text/javascript" src="https://iclient.supermap.io/web/libs/leaflet/plugins/leaflet-miniMap/3.6.1/dist/Control.MiniMap.min.js"></script>
+        
+        <style>
+            /*修改leaflet默认弹框样式*/
+    
+            .leaflet-popup,
+            .leaflet-popup-content-wrapper {
+                padding: 0;
+            }
+    
+            .leaflet-popup-content {
+                margin: 0;
+            }
+        </style>
+
+
+    </head>
+
+
+<body>
+    <!--地图显示的div-->
+    <div id="map" style="position:absolute;left:0px;right:0px;width:1600px;height:900px;"></div>
+</body>
+
+
+
+<script>
+    //定义一个地图变量，和supermap iserver 发布的世界地图的地址
+    var map, url="https://iserver.supermap.io/iserver/services/map-world/rest/maps/World";
+    map=L.map('map',{
+        //地图投影坐标系
+        crs:L.CRS.EPSG4326,
+        //地图中心点
+        center:[0,0],
+        //地图缩放级别
+        maxZoom:18,
+        zoom:1
+    });
+    L.supermap.tiledMapLayer(url).addTo(map);
+    
+</script>
+<script>
+
+    //添加组件：
+    var poiSearch = new L.supermap.Components.Search({
+        isGeoCoding: !window.isLocal,
+        perPageDataNum: 6  
+    });
+    poiSearch.addTo(map);
+
+
+</script>
+
+<script>
+    var host=window.isLocal ? window.server:"https://iserver.supermap.io";
+    var map,
+        baseUrl=host+"/iserver/services/map-world/rest/maps/World";
+
+
+    var osm=L.supermap.tiledMapLayer(baseUrl,{minZoom:5,maxZoom:18,noWrap:true});
+    map.addLayer(osm);
+    map.setView(L.latLng(59.92448055859924,10.758276373601069),10);
+    var osm2=L.supermap.tiledMapLayer(baseUrl,{minZoom:0,maxZoom:13,noWrap:true});
+    L.control.minimap(osm2,{mapOptions:{logoControl:false},toggleDisplay:true}).addTo(map);
+
+    
+</script>
+<script>
+    L.control.scale({maxWidth:100,metric:true,imperial:false}).addTo(map);
+</script>
+
+<script>
+    L.control.scale({maxWidth:50,metric:true,imperial:false}).addTo(map);
+</script> 
+
+<script type="text/javascript" src="../../dist/leaflet/include-leaflet.js"></script>
+<script tyep="text/javascript">
+    var host=window.isLocal ? window.server:"https://iserver.supermap.io";
+    var map,urlWorld=host+"iserver/services/map-world/rest/maps/World",
+        urljinjing=host+"/iserver/services/map-jingjin/rest/maps/京津地区人口分布图_专题图";
+    L.supermap.tiledMapLayer(urlWorld).addTo(map);
+    L.supermap.tiledMapLayer(urljinjing,{
+        transparent:true,
+        opacity:0.6
+    }).addTo(map);
+</script>
+
+</html>
